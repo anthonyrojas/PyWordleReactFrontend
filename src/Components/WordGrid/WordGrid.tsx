@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react'
+import React, {useState, useContext, useEffect} from 'react'
 import WordRow from '../WordRow/WordRow'
 import WordSubmitButton from '../WordSubmitButton/WordSubmitButton';
 import { WordsContext } from '../../Context/WordsContext';

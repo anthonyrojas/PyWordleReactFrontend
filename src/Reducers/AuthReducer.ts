@@ -3,6 +3,7 @@ export type AuthState = {
     authenticating: boolean;
     isAuthenticated: boolean;
     inErrorState: boolean;
+    successMessage: string;
     errorMessage: string;
     profile: UserProfile|null;
     signingUp: boolean;
@@ -13,6 +14,7 @@ export const initialState: AuthState = {
     authenticating: false,
     isAuthenticated: localStorage.getItem("accessToken") !== null,
     inErrorState: false,
+    successMessage: "",
     errorMessage: "",
     profile: null,
     signingUp: false,
@@ -32,7 +34,8 @@ export enum AuthActionTypes {
     REGISTER_USER_INIT="REGISTER_USER_INIT",
     REGISTER_USER_FAILURE="REGISTER_USER_FAILURE",
     REGISTER_USER_SUCCESS="REGISTER_USER_SUCCESS",
-    LOGOUT="LOGOUT"
+    LOGOUT="LOGOUT",
+    CLEAR_SUCCESS_MESSAGE="CLEAR_SUCCESS_MESSAGE",
 }
 export type AuthReducerAction = {
     type: AuthActionTypes,
@@ -123,10 +126,7 @@ export const AuthReducer = (state: AuthState = initialState, action: AuthReducer
                 signingUp: false,
                 inErrorState: false,
                 errorMessage: action.payload.errorMessage,
-                profile: {
-                    Username: action.payload.profile.Username,
-                    UserAttributes: action.payload.profile.UserAttributes
-                }
+                successMessage: action.payload.successMessage
             }
         case AuthActionTypes.LOGOUT:
             return {
@@ -135,6 +135,11 @@ export const AuthReducer = (state: AuthState = initialState, action: AuthReducer
                 errorMessage: "",
                 inErrorState: false,
                 profile: null
+            }
+        case AuthActionTypes.CLEAR_SUCCESS_MESSAGE:
+            return{
+                ...state,
+                successMessage: ""
             }
         default: return state
     }

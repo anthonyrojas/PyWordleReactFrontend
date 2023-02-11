@@ -5,7 +5,7 @@ type Props = {
 }
 
 export default function ErrorBanner(props: Props) {
-    if (props.errorMessage.trim().length === 0) {
+    if (props.errorMessage || props.errorMessage.trim().length === 0) {
         return null;
     }
     return (

@@ -13,7 +13,7 @@ type RegisterUserParams = {
     lastName: string;
     password: string;
 }
-export async function registerUser(params: RegisterUserParams, dispatch: React.Dispatch<AuthReducerAction>) {
+export async function registerUser(params: RegisterUserParams, dispatch: React.Dispatch<AuthReducerAction>, navigate: NavigateFunction) {
     dispatch({
         type: AuthActionTypes.REGISTER_USER_INIT,
         payload: {
@@ -31,12 +31,10 @@ export async function registerUser(params: RegisterUserParams, dispatch: React.D
         dispatch({
             type: AuthActionTypes.REGISTER_USER_SUCCESS,
             payload: {
-                profile: {
-                    Username: data.Username,
-                    UserAttributes: data.UserAttributes
-                }
+                successMessage: `Successfully registered with username ${data.user.Username}.`
             }
         });
+        navigate("/login")
     } catch (e: any) {
         console.error(e.response)
         dispatch({
@@ -178,4 +176,11 @@ export async function logoutUser(dispatch: React.Dispatch<AuthReducerAction>) {
         type: AuthActionTypes.LOGOUT,
         payload: {}
     });
+}
+
+export async function clearSuccessMessage(dispatch: React.Dispatch<AuthReducerAction>) {
+    dispatch({
+        type: AuthActionTypes.CLEAR_SUCCESS_MESSAGE,
+        payload: {}
+    })
 }

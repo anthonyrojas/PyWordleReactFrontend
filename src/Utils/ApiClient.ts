@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from "axios";
+import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
 const ApiClient: AxiosInstance = axios.create({
     baseURL: process.env.REACT_APP_PY_API_URL,
     headers: {
@@ -10,6 +10,21 @@ const ApiClient: AxiosInstance = axios.create({
 
 const errorResHandler = async (err: any) => {
     try {
+        if (!err.response) {
+            let axiosError = err as AxiosError;
+            axiosError.response = {
+                data: {
+                    detail: {
+                        "Message": "Something went wrong! Service error."
+                    }
+                },
+                status: 500,
+                statusText: "",
+                config: axiosError.config!,
+                headers: {}
+            }
+            throw axiosError;
+        }
         if (err.response.status === 401) {
             const res = await ApiClient.post("/auth/refresh", {
                 "refresh_token": localStorage.getItem("refreshToken"),
